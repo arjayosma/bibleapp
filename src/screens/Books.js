@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -21,6 +21,7 @@ export default () => {
   const {selectedChapter, verses} = useSelector(state => state.booksReducer);
   const {favorites} = useSelector(state => state.favoritesReducer);
   const [loading, setLoading] = useState(false);
+  const [highlighted, setHighlighted] = useState([]);
 
   const handleSelect = selection => {
     setLoading(true);
@@ -31,6 +32,7 @@ export default () => {
     return (
       <VerseItem
         key={index}
+        highlighted={highlighted.includes(index)}
         onHighlight={() => toggleHighlight(verse)}
         text={text}
         verse={verse}
@@ -56,6 +58,18 @@ export default () => {
 
     dispatch(toggleFavoriteVerse(newList));
   };
+
+  useEffect(() => {
+    if (favorites) {
+      const versesToHighlight = [];
+      favorites.forEach(({chapter, index}) => {
+        if (chapter === selectedChapter) {
+          versesToHighlight.push(index);
+        }
+      });
+      setHighlighted([...versesToHighlight]);
+    }
+  }, [favorites, selectedChapter, setHighlighted]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
