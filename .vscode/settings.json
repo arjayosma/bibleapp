@@ -1,0 +1,9 @@
+{
+  "cSpell.enabled": false,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 120,
+  "files.trimFinalNewlines": true,
+  "prettier.singleQuote": true
+}
