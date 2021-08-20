@@ -19,6 +19,7 @@ import {toggleFavoriteVerse} from '../redux/actions/favorites';
 export default () => {
   const dispatch = useDispatch();
   const {selectedChapter, verses} = useSelector(state => state.booksReducer);
+  const {favorites} = useSelector(state => state.favoritesReducer);
   const [loading, setLoading] = useState(false);
 
   const handleSelect = selection => {
@@ -38,15 +39,22 @@ export default () => {
   };
 
   const toggleHighlight = verse => {
+    const count = favorites.length;
     const key = `${selectedChapter}:${verse}`;
-    const verseDetails = {
-      chapter: selectedChapter,
-      id: key,
-      index: verse - 1,
-      text: verses[verse - 1].text,
-      verse,
-    };
-    dispatch(toggleFavoriteVerse(verseDetails));
+    const newList = favorites.filter(({id}) => id !== key);
+
+    if (newList.length === count) {
+      const verseDetails = {
+        chapter: selectedChapter,
+        id: key,
+        index: verse - 1,
+        text: verses[verse - 1].text,
+        verse,
+      };
+      newList.push(verseDetails);
+    }
+
+    dispatch(toggleFavoriteVerse(newList));
   };
 
   return (

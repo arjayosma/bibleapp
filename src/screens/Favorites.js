@@ -15,10 +15,8 @@ import HeaderTitle from '../components/header-title';
 export default () => {
   const {favorites} = useSelector(state => state.favoritesReducer);
   const [loading, setLoading] = useState(false);
-  console.log(favorites);
 
   const renderFavorites = ({item, index}) => {
-    console.log(item);
     return <FavoriteItem key={index} title={item.id} verse={item.text} />;
   };
 

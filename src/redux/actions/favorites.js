@@ -1,9 +1,9 @@
 import {TOGGLE_FAVORITE_VERSE} from '../types';
 
-export const toggleFavoriteVerse = verseDetails => {
+export const toggleFavoriteVerse = favorites => {
   return async dispatch => {
     return new Promise(resolve => {
-      dispatch({data: verseDetails, type: TOGGLE_FAVORITE_VERSE});
+      dispatch({data: favorites, type: TOGGLE_FAVORITE_VERSE});
       resolve(true);
     });
   };
