@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,12 +14,34 @@ import BookListItem from '../book-list-item';
 
 export default ({onSelect}) => {
   const {height} = useWindowDimensions();
-  const [book, setBook] = useState('Select a Book');
+  const [selected, setSelected] = useState('Select a Book');
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(null);
   const [showModal, setModalState] = useState(false);
 
   const handleOnScroll = event => {
     setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
+
+  const handleSelect = chapter => {
+    const {name} = books[selectedIndex];
+    const selection = `${name} ${chapter}`;
+    onSelect(selection);
+    setSelected(selection);
+    toggleModal();
+  };
+
+  const renderBook = ({item: book, index}) => {
+    return (
+      <BookListItem
+        key={index}
+        book={book.name}
+        chapters={book.chapters}
+        onSelect={handleSelect}
+        selected={selectedIndex === index}
+        toggleChapters={() => setSelectedIndex(index)}
+      />
+    );
   };
 
   const toggleModal = () => {
@@ -30,7 +52,7 @@ export default ({onSelect}) => {
     <>
       <TouchableOpacity onPress={toggleModal}>
         <View style={styles.container}>
-          <Text style={styles.text}>{book}</Text>
+          <Text style={styles.text}>{selected}</Text>
         </View>
       </TouchableOpacity>
       <Modal
@@ -45,15 +67,12 @@ export default ({onSelect}) => {
           <Text style={styles.modalTitle}>
             Select a Book and a Chapter to read
           </Text>
-          <ScrollView onScroll={handleOnScroll} scrollEventThrottle={16}>
-            {books.map((book, index) => (
-              <BookListItem
-                key={index}
-                book={book.name}
-                chapters={book.chapters}
-              />
-            ))}
-          </ScrollView>
+          <FlatList
+            data={books}
+            onScroll={handleOnScroll}
+            renderItem={renderBook}
+            scrollEventThrottle={16}
+          />
         </View>
       </Modal>
     </>

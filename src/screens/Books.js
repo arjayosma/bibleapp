@@ -6,11 +6,15 @@ import BookSelector from '../components/book-selector';
 import HeaderTitle from '../components/header-title';
 
 export default () => {
+  const handleSelect = selection => {
+    console.log(selection);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.header}>
         <HeaderTitle title="Bible App" />
-        <BookSelector />
+        <BookSelector onSelect={handleSelect} />
       </View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

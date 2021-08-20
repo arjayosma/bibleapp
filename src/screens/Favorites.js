@@ -1,10 +1,41 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+import HeaderTitle from '../components/header-title';
 
 export default () => {
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <Text>Favorites</Text>
-    </ScrollView>
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.header}>
+        <HeaderTitle title="Favorites" />
+      </View>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={styles.container}>
+        <Text>asdasd</Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  // Safe area view styles
+  safeAreaView: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  // Screen container styles
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  // App header styles
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+});
