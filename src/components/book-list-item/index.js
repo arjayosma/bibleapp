@@ -15,6 +15,7 @@ export default ({book, chapters, onSelect, selected, toggleChapters}) => {
       const chapter = i + 1;
       const component = (
         <TouchableOpacity
+          key={i}
           onPress={() => onSelect(chapter)}
           style={styles.chapter}>
           <Text style={styles.chapterText}>{chapter}</Text>
@@ -49,7 +50,6 @@ const styles = StyleSheet.create({
   bookTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginRight: 10,
   },
   chapter: {
     alignItems: 'center',

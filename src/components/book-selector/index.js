@@ -69,6 +69,7 @@ export default ({onSelect}) => {
           </Text>
           <FlatList
             data={books}
+            keyExtractor={(item, index) => `${item.name}-${index}`}
             onScroll={handleOnScroll}
             renderItem={renderBook}
             scrollEventThrottle={16}
