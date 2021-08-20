@@ -7,25 +7,25 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
 
 import BookSelector from '../components/book-selector';
 import HeaderTitle from '../components/header-title';
 import VerseItem from '../components/verse-item';
 
-import {getBibleChapter} from '../utils/api';
+import {fetchBibleChapter} from '../redux/actions/books';
 
 export default () => {
-  const [content, setContent] = useState(null);
+  const dispatch = useDispatch();
+  const {selectedChapter, verses} = useSelector(state => state.booksReducer);
+
   const [title, setTitle] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSelect = async selection => {
+  const handleSelect = selection => {
     setTitle(selection);
-    setContent(null);
     setLoading(true);
-    const response = await getBibleChapter(selection);
-    setContent(response.verses);
-    setLoading(false);
+    dispatch(fetchBibleChapter(selection)).then(() => setLoading(false));
   };
 
   const renderVerse = ({item: {text, verse}, index}) => {
@@ -39,14 +39,17 @@ export default () => {
         <BookSelector onSelect={handleSelect} />
       </View>
       <View
-        style={[styles.container, content === null && styles.emptyContainer]}>
+        style={[
+          styles.container,
+          selectedChapter === null && styles.emptyContainer,
+        ]}>
         {loading ? (
           <ActivityIndicator size="large" />
-        ) : content ? (
+        ) : selectedChapter ? (
           <View>
             <Text style={styles.title}>{title}</Text>
             <FlatList
-              data={content}
+              data={verses}
               keyExtractor={({verse}) => `${verse}`}
               renderItem={renderVerse}
               style={styles.verseContainer}
