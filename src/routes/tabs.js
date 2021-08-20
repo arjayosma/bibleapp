@@ -1,5 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Books from '../screens/Books';
 import Favorites from '../screens/Favorites';
@@ -11,6 +12,13 @@ const tabScreens = [
     component: Books,
     name: 'BooksScreen',
     options: {
+      tabBarIcon: ({color, focused}) => (
+        <Ionicons
+          color={color}
+          name={focused ? 'bookmarks' : 'bookmarks-outline'}
+          size={24}
+        />
+      ),
       tabBarLabel: 'Books',
     },
   },
@@ -18,6 +26,13 @@ const tabScreens = [
     component: Favorites,
     name: 'FavoritesScreen',
     options: {
+      tabBarIcon: ({color, focused}) => (
+        <Ionicons
+          color={color}
+          name={focused ? 'heart' : 'heart-outline'}
+          size={24}
+        />
+      ),
       tabBarLabel: 'Favorites',
     },
   },
@@ -35,7 +50,11 @@ export default () => {
     ));
 
   return (
-    <TabNavigator initialRouteName="ActivityListScreen">
+    <TabNavigator
+      initialRouteName="BooksScreen"
+      screenOptions={{
+        headerShown: false,
+      }}>
       {renderTabs()}
     </TabNavigator>
   );
