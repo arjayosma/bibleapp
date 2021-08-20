@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 
-export default ({highlighted, text, verse}) => {
+export default ({highlighted, onHighlight, text, verse}) => {
   return (
-    <TouchableWithoutFeedback onPress={() => console.log('pressed')}>
+    <TouchableWithoutFeedback onPress={onHighlight}>
       <Text>
         <View style={styles.verseNumber}>
           <Text style={styles.number}>{verse}</Text>

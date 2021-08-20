@@ -7,16 +7,19 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
 
 import FavoriteItem from '../components/favorite-item';
 import HeaderTitle from '../components/header-title';
 
 export default () => {
-  const [favorites, setFavorites] = useState([]);
+  const {favorites} = useSelector(state => state.favoritesReducer);
   const [loading, setLoading] = useState(false);
+  console.log(favorites);
 
-  const renderFavorites = ({item: favorites, index}) => {
-    return <FavoriteItem />;
+  const renderFavorites = ({item, index}) => {
+    console.log(item);
+    return <FavoriteItem key={index} title={item.id} verse={item.text} />;
   };
 
   return (
@@ -34,7 +37,7 @@ export default () => {
         ) : favorites.length ? (
           <FlatList
             data={favorites}
-            keyExtractor={({verse}) => `${verse}`}
+            keyExtractor={({id}) => `${id}`}
             renderItem={renderFavorites}
             style={styles.verseContainer}
           />

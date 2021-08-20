@@ -14,22 +14,39 @@ import HeaderTitle from '../components/header-title';
 import VerseItem from '../components/verse-item';
 
 import {fetchBibleChapter} from '../redux/actions/books';
+import {toggleFavoriteVerse} from '../redux/actions/favorites';
 
 export default () => {
   const dispatch = useDispatch();
   const {selectedChapter, verses} = useSelector(state => state.booksReducer);
-
-  const [title, setTitle] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleSelect = selection => {
-    setTitle(selection);
     setLoading(true);
     dispatch(fetchBibleChapter(selection)).then(() => setLoading(false));
   };
 
   const renderVerse = ({item: {text, verse}, index}) => {
-    return <VerseItem key={index} text={text} verse={verse} />;
+    return (
+      <VerseItem
+        key={index}
+        onHighlight={() => toggleHighlight(verse)}
+        text={text}
+        verse={verse}
+      />
+    );
+  };
+
+  const toggleHighlight = verse => {
+    const key = `${selectedChapter}:${verse}`;
+    const verseDetails = {
+      chapter: selectedChapter,
+      id: key,
+      index: verse - 1,
+      text: verses[verse - 1].text,
+      verse,
+    };
+    dispatch(toggleFavoriteVerse(verseDetails));
   };
 
   return (
@@ -47,7 +64,7 @@ export default () => {
           <ActivityIndicator size="large" />
         ) : selectedChapter ? (
           <View>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>{selectedChapter}</Text>
             <FlatList
               data={verses}
               keyExtractor={({verse}) => `${verse}`}
