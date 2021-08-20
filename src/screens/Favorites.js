@@ -1,23 +1,30 @@
-import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import FavoriteItem from '../components/favorite-item';
 import HeaderTitle from '../components/header-title';
+import {setSelectedChapter} from '../redux/actions/books';
 
-export default () => {
+export default ({navigation}) => {
+  const dispatch = useDispatch();
   const {favorites} = useSelector(state => state.favoritesReducer);
-  const [loading, setLoading] = useState(false);
+
+  const onPress = (selection, index) => {
+    dispatch(setSelectedChapter(selection));
+    navigation.navigate('BooksScreen', {scrollTo: index});
+  };
 
   const renderFavorites = ({item, index}) => {
-    return <FavoriteItem key={index} title={item.id} verse={item.text} />;
+    return (
+      <FavoriteItem
+        key={index}
+        onPress={() => onPress(item.chapter, item.index)}
+        title={item.id}
+        verse={item.text}
+      />
+    );
   };
 
   return (
@@ -30,9 +37,7 @@ export default () => {
           styles.container,
           favorites.length === 0 && styles.emptyContainer,
         ]}>
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : favorites.length ? (
+        {favorites.length ? (
           <FlatList
             data={favorites}
             keyExtractor={({id}) => `${id}`}

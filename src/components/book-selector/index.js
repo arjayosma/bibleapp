@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -8,11 +8,13 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import {useSelector} from 'react-redux';
 
 import books from '../../data/bible-books.json';
 import BookListItem from '../book-list-item';
 
 export default ({onSelect}) => {
+  const {selectedChapter} = useSelector(state => state.booksReducer);
   const {height} = useWindowDimensions();
   const [selected, setSelected] = useState('Select a Book');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -47,6 +49,12 @@ export default ({onSelect}) => {
   const toggleModal = () => {
     setModalState(!showModal);
   };
+
+  useEffect(() => {
+    if (selectedChapter) {
+      setSelected(selectedChapter);
+    }
+  }, [selectedChapter]);
 
   return (
     <>

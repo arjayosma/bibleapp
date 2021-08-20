@@ -10,6 +10,9 @@ const {Navigator: TabNavigator, Screen: TabScreen} = createBottomTabNavigator();
 const tabScreens = [
   {
     component: Books,
+    initialParams: {
+      scrollTo: 0,
+    },
     name: 'BooksScreen',
     options: {
       tabBarIcon: ({color, focused}) => (
@@ -24,6 +27,9 @@ const tabScreens = [
   },
   {
     component: Favorites,
+    initialParams: {
+      scrollTo: 0,
+    },
     name: 'FavoritesScreen',
     options: {
       tabBarIcon: ({color, focused}) => (
@@ -45,6 +51,7 @@ export default () => {
         key={index}
         component={screen.component}
         name={screen.name}
+        initialParams={screen.initialParams}
         options={screen.options}
       />
     ));

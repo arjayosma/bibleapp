@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 export default ({onPress, title, verse}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.verse}>{verse}</Text>
     </TouchableOpacity>

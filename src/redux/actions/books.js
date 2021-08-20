@@ -1,4 +1,4 @@
-import {FETCH_BIBLE_CHAPTER} from '../types';
+import {FETCH_BIBLE_CHAPTER, SET_SELECTED_CHAPTER} from '../types';
 import {getBibleChapter} from '../../utils/api';
 
 export const fetchBibleChapter = selection => {
@@ -9,7 +9,6 @@ export const fetchBibleChapter = selection => {
       if (!response.error) {
         dispatch({
           data: {
-            selectedChapter: selection,
             verses: response.verses,
           },
           type: FETCH_BIBLE_CHAPTER,
@@ -18,6 +17,20 @@ export const fetchBibleChapter = selection => {
         reject(response.error);
       }
 
+      resolve(true);
+    });
+  };
+};
+
+export const setSelectedChapter = selection => {
+  return async dispatch => {
+    return new Promise(resolve => {
+      dispatch({
+        data: {
+          selectedChapter: selection,
+        },
+        type: SET_SELECTED_CHAPTER,
+      });
       resolve(true);
     });
   };

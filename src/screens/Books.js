@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,10 +13,12 @@ import BookSelector from '../components/book-selector';
 import HeaderTitle from '../components/header-title';
 import VerseItem from '../components/verse-item';
 
-import {fetchBibleChapter} from '../redux/actions/books';
+import {fetchBibleChapter, setSelectedChapter} from '../redux/actions/books';
 import {toggleFavoriteVerse} from '../redux/actions/favorites';
 
-export default () => {
+export default ({route}) => {
+  const flatListRef = useRef();
+  const {scrollTo} = route?.params;
   const dispatch = useDispatch();
   const {selectedChapter, verses} = useSelector(state => state.booksReducer);
   const {favorites} = useSelector(state => state.favoritesReducer);
@@ -26,6 +28,7 @@ export default () => {
   const handleSelect = selection => {
     setLoading(true);
     dispatch(fetchBibleChapter(selection)).then(() => setLoading(false));
+    dispatch(setSelectedChapter(selection));
   };
 
   const renderVerse = ({item: {text, verse}, index}) => {
@@ -60,6 +63,15 @@ export default () => {
   };
 
   useEffect(() => {
+    if (selectedChapter) {
+      setLoading(true);
+      dispatch(fetchBibleChapter(selectedChapter)).then(() =>
+        setLoading(false),
+      );
+    }
+  }, [dispatch, selectedChapter]);
+
+  useEffect(() => {
     if (favorites) {
       const versesToHighlight = [];
       favorites.forEach(({chapter, index}) => {
@@ -70,6 +82,12 @@ export default () => {
       setHighlighted([...versesToHighlight]);
     }
   }, [favorites, selectedChapter, setHighlighted]);
+
+  useEffect(() => {
+    if (scrollTo) {
+      flatListRef.current?.scrollToIndex({animated: true, index: scrollTo});
+    }
+  }, [scrollTo]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -88,6 +106,7 @@ export default () => {
           <View>
             <Text style={styles.title}>{selectedChapter}</Text>
             <FlatList
+              ref={flatListRef}
               data={verses}
               keyExtractor={({verse}) => `${verse}`}
               renderItem={renderVerse}

@@ -1,4 +1,4 @@
-import {FETCH_BIBLE_CHAPTER} from '../types';
+import {FETCH_BIBLE_CHAPTER, SET_SELECTED_CHAPTER} from '../types';
 
 const initialState = {
   selectedChapter: null,
@@ -11,8 +11,12 @@ export default (state = initialState, action) => {
     case FETCH_BIBLE_CHAPTER:
       return {
         ...state,
-        selectedChapter: data.selectedChapter,
         verses: data.verses,
+      };
+    case SET_SELECTED_CHAPTER:
+      return {
+        ...state,
+        selectedChapter: data.selectedChapter,
       };
     default:
       return {...state};
